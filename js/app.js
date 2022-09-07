@@ -12,7 +12,7 @@ function init() {
 	var circle = new createjs.Shape();
 	circle.graphics.beginFill("red").drawCircle(0, 0, 50);
 	
-	var label = new createjs.Text("拖拽", "24px 思源宋体", "#FFFFFF");
+	var label = new createjs.Text("拖拽", "24px 思源黑体 extralight", "#FFFFFF");
 	label.textAlign = "center";
 	label.y = -10;
 	
