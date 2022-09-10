@@ -4,11 +4,50 @@
 		<meta charset="utf-8">
 		<title>元素的拖拽</title>
 		<script src="js/createJS/easeljs.min.js"></script>
-			<script src="js/app.js"></script>
-			<script type="text/javascript">
-				window.onload = init;
-			</script>
-		
+		<script type="text/javascript">
+			window.onload = function() {
+				var stage = new createjs.Stage("canvas");
+				// For mobile devices.
+				createjs.Touch.enable(stage);
+				
+				// 即使鼠标离开画布，拖动也继续跟踪鼠标
+				stage.mouseMoveOutside = true; 
+				
+				var circle = new createjs.Shape();
+				circle.graphics.beginFill("red").drawCircle(0, 0, 50);
+				
+				var label = new createjs.Text("\u2B1B\uFE0F拖拽", "24px 思源黑体 heavy", "#000000");
+				label.textAlign = "center";
+				label.y = -10;
+				
+				var dragger = new createjs.Container();
+				dragger.x = dragger.y = 100;
+				dragger.addChild(circle, label);
+				stage.addChild(dragger);
+				// mouseChildren 属性为 true, 子元素的监听器会触发，否则不会
+				dragger.mouseChildren = false;
+				enableDrag(dragger);
+				enableDrag(circle);
+				stage.update();
+				
+				function enableDrag(obj) {
+					obj.on("mousedown", function(evt) {
+						var target = evt.currentTarget;
+						target.offsetX = evt.stageX - target.x;
+						target.offsetY = evt.stageY - target.y;
+						
+					});
+					obj.on("pressmove",function(evt) {
+						var ct = evt.currentTarget;
+						// target 是事件的冒泡的起点元素，currentTarget 是当前冒泡到的元素
+						ct.x = evt.stageX - ct.offsetX;
+						ct.y = evt.stageY - ct.offsetY;
+						stage.update();   
+					});
+				}
+			};
+		</script>
+	
 	</head>
 	<body>
 		<canvas id = "canvas" width="640px" height="480px" style="background-color: antiquewhite;">
