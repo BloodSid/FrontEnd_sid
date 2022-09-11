@@ -9,7 +9,11 @@
 			var Shape = createjs.Shape;
 			var Graphics = createjs.Graphics;
 			window.onload = function() {
-				stage = new createjs.Stage('canvas');
+				var canvas = document.getElementById("canvas");
+				canvas.width = window.innerWidth - 18;
+				canvas.height = window.innerHeight - 20;
+				
+				stage = new createjs.Stage("canvas");
 				
 				// 触控适配
 				createjs.Touch.enable(stage);
