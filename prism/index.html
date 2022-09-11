@@ -10,7 +10,6 @@
 			var Graphics = createjs.Graphics;
 			window.onload = function() {
 				var canvas = document.getElementById("canvas");
-				console.log(canvas.offsetLeft, canvas.offsetTop);
 				canvas.width = document.documentElement.clientWidth - 2 * canvas.offsetLeft;
 				canvas.height = document.documentElement.clientHeight - 2.5 * canvas.offsetTop;
 				
@@ -25,6 +24,7 @@
 				// 顶点显示时半径 4px
 				// TODO 做一个hitarea,半径比视觉更大
 				var v1 = new Shape();
+				// TODO 重新绘制三角形的操作可以抽象成一个函数
 				v1.graphics.setStrokeStyle(2).beginStroke('#000000').beginFill('#ffff00').drawCircle(0, 0, 4);
 				v1.y = -100 * 1.73;
 				var v2 = new Shape(v1.graphics);
@@ -34,15 +34,17 @@
 
 				// 顶点围成的三角形
 				var triangle = new Shape();
-				triangle.graphics.setStrokeStyle(2).beginStroke('#ffffff').beginFill("#ffffff").mt(v1.x, v1.y).lt(v2.x, v2.y).lt(v3.x, v3.y).lt(v1.x, v1.y);
+				function drawTriangle(evt) {
+					triangle.graphics.clear().setStrokeStyle(2).beginStroke('#ffffff').beginFill("#ffffff").mt(v1.x, v1.y).lt(v2.x, v2.y).lt(v3.x, v3.y).lt(v1.x, v1.y);
+				}
 				triangle.alpha = 0.25;
+				drawTriangle();
 				 
 				// 拖动顶点的同时修改三角形
 				for (var shape of [v1, v2, v3]) {
-					shape.on('pressmove', function(evt) {
-						triangle.graphics.clear().setStrokeStyle(2).beginStroke('#ffffff').beginFill("#ffffff").mt(v1.x, v1.y).lt(v2.x, v2.y).lt(v3.x, v3.y).lt(v1.x, v1.y);
-					});
+					shape.dragBinding = drawTriangle;
 				}
+				
 				var triplePrism = new createjs.Container();
 				triplePrism.x = 320, triplePrism.y = 310;
 				triplePrism.addChild(triangle, v1, v2, v3);
