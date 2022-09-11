@@ -10,18 +10,27 @@
 			var Graphics = createjs.Graphics;
 			window.onload = function() {
 				stage = new createjs.Stage('canvas');
-				var v1 = new Shape();
+				
+				// 触控适配
+				createjs.Touch.enable(stage);
+				
+				// 即使鼠标离开画布，拖动也继续跟踪鼠标
+				stage.mouseMoveOutside = true; 
+				
 				// 顶点显示时半径 4px
+				var v1 = new Shape();
 				v1.graphics.setStrokeStyle(1).beginFill('#ffff00').drawCircle(0, 0, 4);
 				v1.y = -100 * 1.73;
 				var v2 = new Shape(v1.graphics);
 				v2.x = -100;
 				var v3 = new Shape(v1.graphics);
 				v3.x = 100;
+				
 				// 顶点围成的三角形
 				var triangle = new Shape();
 				triangle.graphics.beginFill("#ffffff").mt(v1.x, v1.y).lt(v2.x, v2.y).lt(v3.x, v3.y);
 				triangle.alpha = 0.4;
+				
 				// 拖动顶点的同时修改三角形
 				for (var shape of [v1, v2, v3]) {
 					shape.on('pressmove', function(evt) {
