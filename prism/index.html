@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>棱镜的折射</title>
+		<script src = "/FrontEnd_sid/js/createJS/easeljs.min.js"></script>
+		<script src = "/FrontEnd_sid/js/util.js"></script>
+		<script>
+			var Shape = createjs.Shape;
+			var Graphics = createjs.Graphics;
+			window.onload = function() {
+				stage = new createjs.Stage('canvas');
+				var v1 = new Shape();
+				// 顶点显示时半径 4px
+				v1.graphics.setStrokeStyle(1).beginFill('#ffff00').drawCircle(0, 0, 4);
+				v1.y = -100 * 1.73;
+				var v2 = new Shape(v1.graphics);
+				v2.x = -100;
+				var v3 = new Shape(v1.graphics);
+				v3.x = 100;
+				// 顶点围成的三角形
+				var triangle = new Shape();
+				triangle.graphics.beginFill("#ffffff").mt(v1.x, v1.y).lt(v2.x, v2.y).lt(v3.x, v3.y);
+				triangle.alpha = 0.4;
+				// 拖动顶点的同时修改三角形
+				for (var shape of [v1, v2, v3]) {
+					shape.on('pressmove', function(evt) {
+						triangle.graphics.clear().beginFill("#ffffff").mt(v1.x, v1.y).lt(v2.x, v2.y).lt(v3.x, v3.y);
+					});
+				}
+				var triplePrism = new createjs.Container();
+				triplePrism.x = 320, triplePrism.y = 310;
+				triplePrism.addChild(triangle, v1, v2, v3);
+				stage.enableDrag(triplePrism, v1, v2, v3);
+				stage.addChild(triplePrism);
+				stage.update();
+			}
+		</script>
+	</head>
+	<body>
+		<canvas id = "canvas" width="640px" height="480px" style="background-color: black;">
+			请升级浏览器
+		</canvas>
+	</body>
+</html>
