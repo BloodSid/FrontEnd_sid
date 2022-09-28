@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>每日人品</title>
+		<script type="text/javascript">
+			window.onload = function(){
+				var input = document.getElementsByTagName('input')[0];
+				var btn = document.getElementsByTagName('button')[0];
+				var text = document.getElementsByTagName('p')[0];
+				btn.onclick = function(){
+					var str = input.value;
+					var date = new Date().toLocaleDateString();
+					if (str.length == 0) {
+						text.innerHTML = "请输入ID";
+					} else {
+						text.innerHTML = str + "今天的人品是: " + (hash(date + '/' + str + 'pnpMvCm4SF') % 101); 
+					}
+				}
+				
+				var MOD = 1e9 + 7;
+				var SEED = 99991;
+				
+				function hash(data) {
+					console.log(data)
+					var s = [...data];
+					var res = 0;
+					for (var ch of s) {
+						res = (res * SEED + ch.charCodeAt(0)) % MOD;
+					}
+					res = res ^ (res >> 16);
+					return res;
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<input />
+		<button>.jrrp</button>
+		<p></p>
+	</body>
+</html>
